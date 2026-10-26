@@ -2,6 +2,10 @@
   "name": "FrAnime Suite",
   "extension": "eu.kanade.tachiyomi.animeextension.fr.franime.FrAnime",
   "lang": "fr",
+  "headers": {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+    "Accept": "application/json, text/plain, */*"
+  },
   "tests": [
     {
       "name": "FrAnime Popular Catalog Check",
