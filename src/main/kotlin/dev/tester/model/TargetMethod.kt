@@ -13,6 +13,7 @@ enum class TargetMethod {
     GET_EPISODE_LIST,
     GET_HOSTER_LIST,
     GET_VIDEO_LIST,
+    FETCH_RELATED,
 
     // Low-level Request builders
     POPULAR_REQUEST,

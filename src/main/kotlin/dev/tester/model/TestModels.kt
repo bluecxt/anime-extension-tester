@@ -27,6 +27,7 @@ data class TestCaseSpec(
 data class TestInput(
     val page: Int = 1,
     val query: String = "",
+    val filters: Map<String, JsonElement> = emptyMap(),
     val anime: AnimeSnapshotDto? = null,
     val episode: EpisodeSnapshotDto? = null,
     val hoster: HosterSnapshotDto? = null,

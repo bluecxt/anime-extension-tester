@@ -13,6 +13,7 @@ import dev.tester.model.TestSuiteSpec
 import dev.tester.model.VideoSnapshotDto
 import dev.tester.net.TestNetworkHelper
 import dev.tester.ui.ConsoleReporter
+import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.Hoster
@@ -24,11 +25,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -192,11 +198,18 @@ class TestRunner(
             }
 
             TargetMethod.GET_SEARCH -> {
-                val page = source.getSearchAnime(input.page, input.query, AnimeFilterList())
+                val filterList = buildFilterList(source, input.filters)
+                val page = source.getSearchAnime(input.page, input.query, filterList)
                 ExpectedSnapshot(
                     animes = page.animes.map { SafeModelMapper.toDto(it) },
                     hasNextPage = page.hasNextPage,
                 )
+            }
+
+            TargetMethod.FETCH_RELATED -> {
+                val domainAnime = SafeModelMapper.toDomain(input.anime ?: error("Target ${testCase.target} requires input.anime"))
+                val related = invokeSuspendingMethod(source, "fetchRelatedAnimeList", domainAnime) as? List<SAnime> ?: emptyList()
+                ExpectedSnapshot(animes = related.map { SafeModelMapper.toDto(it) })
             }
 
             TargetMethod.GET_DETAILS -> {
@@ -404,6 +417,82 @@ class TestRunner(
             for (url in urls) {
                 if (!regex.containsMatchIn(url)) {
                     error("Contract violation: url '$url' does not match pattern '$pattern'")
+                }
+            }
+        }
+    }
+
+    private suspend fun invokeSuspendingMethod(target: Any, name: String, vararg args: Any?): Any? =
+        suspendCancellableCoroutine { cont ->
+            val method = target::class.java.methods.firstOrNull { it.name == name && it.parameterCount == args.size + 1 }
+                ?: error("Suspending method '$name' with ${args.size} argument(s) not found on ${target::class.java.name}")
+            method.isAccessible = true
+            try {
+                val res = method.invoke(target, *args, cont)
+                if (res != kotlin.coroutines.intrinsics.COROUTINE_SUSPENDED) {
+                    cont.resume(res)
+                }
+            } catch (e: Exception) {
+                val cause = if (e is java.lang.reflect.InvocationTargetException) e.targetException ?: e else e
+                cont.resumeWithException(cause)
+            }
+        }
+
+    private fun buildFilterList(source: AnimeHttpSource, filterMap: Map<String, JsonElement>): AnimeFilterList {
+        val filterList = runCatching { source.getFilterList() }.getOrNull() ?: AnimeFilterList()
+        if (filterMap.isEmpty()) return filterList
+
+        for (filter in filterList) {
+            applyFilterValue(filter, filterMap)
+        }
+        return filterList
+    }
+
+    private fun applyFilterValue(filter: Any, filterMap: Map<String, JsonElement>) {
+        val name = when (filter) {
+            is AnimeFilter<*> -> filter.name
+            else -> return
+        }
+
+        val jsonValue = filterMap[name] ?: return
+
+        when (filter) {
+            is AnimeFilter.Select<*> -> {
+                jsonValue.toString().toIntOrNull()?.let { index ->
+                    filter.state = index
+                } ?: run {
+                    val str = jsonValue.toString().trim('"')
+                    val idx = filter.values.indexOfFirst { it.toString().equals(str, ignoreCase = true) }
+                    if (idx != -1) filter.state = idx
+                }
+            }
+            is AnimeFilter.CheckBox -> {
+                val boolVal = jsonValue.toString().toBooleanStrictOrNull() ?: (jsonValue.toString() == "1")
+                filter.state = boolVal
+            }
+            is AnimeFilter.TriState -> {
+                val stateInt = jsonValue.toString().toIntOrNull() ?: 0
+                filter.state = stateInt
+            }
+            is AnimeFilter.Text -> {
+                filter.state = jsonValue.toString().trim('"')
+            }
+            is AnimeFilter.Group<*> -> {
+                if (jsonValue is JsonObject) {
+                    filter.state.forEach { child ->
+                        applyFilterValue(child as Any, jsonValue)
+                    }
+                }
+            }
+            else -> {
+                runCatching {
+                    val field = filter::class.java.declaredFields.firstOrNull { it.name == "state" }
+                    field?.let {
+                        it.isAccessible = true
+                        jsonValue.toString().toIntOrNull()?.let { intVal -> it.set(filter, intVal) }
+                            ?: jsonValue.toString().toBooleanStrictOrNull()?.let { bVal -> it.set(filter, bVal) }
+                            ?: it.set(filter, jsonValue.toString().trim('"'))
+                    }
                 }
             }
         }
