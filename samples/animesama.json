@@ -1,0 +1,434 @@
+{
+    "name": "Anime-Sama Suite",
+    "extension": "eu.kanade.tachiyomi.animeextension.fr.animesama.AnimeSama",
+    "preferences": {
+        "early_fetch": true
+    },
+    "tests": [
+        {
+            "name": "Popular Anime Catalog Check",
+            "target": "GET_POPULAR",
+            "contract": {
+                "minCount": 5,
+                "requireNonBlankFields": [
+                    "title",
+                    "url"
+                ]
+            },
+            "expected": {
+                "animes": [
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/zombie-sagashitemasu\",\n    \"titles\": [\n        \"#Zombie Sagashitemasu\",\n        \"zombie sagashitemasu\"\n    ]\n}",
+                        "title": "#Zombie Sagashitemasu",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/zombie-sagashitemasu.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/tis-time-for-torture-princess\",\n    \"titles\": [\n        \"'Tis Time for \\\"Torture,\\\" Princess\",\n        \"tis time for torture princess\"\n    ]\n}",
+                        "title": "'Tis Time for \"Torture,\" Princess",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/tis-time-for-torture-princess.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/07-ghost\",\n    \"titles\": [\n        \"07 Ghost\",\n        \"07 ghost\"\n    ]\n}",
+                        "title": "07 Ghost",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/07-ghost.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/100-meters\",\n    \"titles\": [\n        \"100 Meters\",\n        \"100 meters\"\n    ]\n}",
+                        "title": "100 Meters",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/100-meters.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/16bit-sensation-another-layer\",\n    \"titles\": [\n        \"16bit Sensation: Another Layer\",\n        \"16bit sensation another layer\"\n    ]\n}",
+                        "title": "16bit Sensation: Another Layer",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/16bit-sensation-another-layer.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/2.43-seiin-koukou-danshi-volley-bu\",\n    \"titles\": [\n        \"2.43 Seiin Koukou Danshi Volley-bu\",\n        \"2.43 seiin koukou danshi volley bu\"\n    ]\n}",
+                        "title": "2.43 Seiin Koukou Danshi Volley-bu",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/2.43-seiin-koukou-danshi-volley-bu.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/2.5-jigen-no-ririsa\",\n    \"titles\": [\n        \"2.5-jigen no Ririsa\",\n        \"2.5 jigen no ririsa\"\n    ]\n}",
+                        "title": "2.5-jigen no Ririsa",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/2.5-jigen-no-ririsa.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/29-sai-dokushin-chuuken-boukensha-no-nichijou\",\n    \"titles\": [\n        \"29-Sai Dokushin Chuuken Boukensha no Nichijou\",\n        \"29 sai dokushin chuuken boukensha no nichijou\"\n    ]\n}",
+                        "title": "29-Sai Dokushin Chuuken Boukensha no Nichijou",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/29-sai-dokushin-chuuken-boukensha-no-nichijou.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/365-days-to-the-wedding\",\n    \"titles\": [\n        \"365 Days To The Wedding\",\n        \"365 days to the wedding\"\n    ]\n}",
+                        "title": "365 Days To The Wedding",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/365-days-to-the-wedding.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/3d-kanojo\",\n    \"titles\": [\n        \"3D Kanojo\",\n        \"3d kanojo\"\n    ]\n}",
+                        "title": "3D Kanojo",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/3d-kanojo.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/4-cut-hero\",\n    \"titles\": [\n        \"4 Cut Hero\",\n        \"4 cut hero\"\n    ]\n}",
+                        "title": "4 Cut Hero",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/4-cut-hero.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/5-cm-per-second\",\n    \"titles\": [\n        \"5cm per second\",\n        \"5 cm per second\"\n    ]\n}",
+                        "title": "5cm per second",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/5-cm-per-second.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/7-jours\",\n    \"titles\": [\n        \"7 Jours\",\n        \"7 jours\"\n    ]\n}",
+                        "title": "7 Jours",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/7-jours.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/7-seeds\",\n    \"titles\": [\n        \"7 Seeds\",\n        \"7 seeds\"\n    ]\n}",
+                        "title": "7 Seeds",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/7-seeds0.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/7th-time-loop-the-villainess-enjoys-a-carefree-life-married-to-her-worst-enemy\",\n    \"titles\": [\n        \"7th Time Loop: The Villainess Enjoys a Carefree Life Married to Her Worst Enemy!\",\n        \"7th time loop the villainess enjoys a carefree life married to her worst enemy\"\n    ]\n}",
+                        "title": "7th Time Loop: The Villainess Enjoys a Carefree Life Married to Her Worst Enemy!",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/7th-time-loop-the-villainess-enjoys-a-carefree-life-married-to-her-worst-enemy.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/86-eighty-six\",\n    \"titles\": [\n        \"86 Eighty Six\",\n        \"86 eighty six\"\n    ]\n}",
+                        "title": "86 Eighty Six",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/86-eighty-six1.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/91-days\",\n    \"titles\": [\n        \"91 Days\",\n        \"91 days\"\n    ]\n}",
+                        "title": "91 Days",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/91-days0.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-centaurs-life\",\n    \"titles\": [\n        \"A Centaur's Life\",\n        \"a centaurs life\"\n    ]\n}",
+                        "title": "A Centaur's Life",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-centaurs-life0.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-certain-dark-item\",\n    \"titles\": [\n        \"A Certain Dark Item\",\n        \"a certain dark item\"\n    ]\n}",
+                        "title": "A Certain Dark Item",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-certain-dark-item.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-certain-magical-index\",\n    \"titles\": [\n        \"A Certain Magical Index\",\n        \"a certain magical index\"\n    ]\n}",
+                        "title": "A Certain Magical Index",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-certain-magical-index.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-certain-scientific-accelerator\",\n    \"titles\": [\n        \"A Certain Scientific Accelerator\",\n        \"a certain scientific accelerator\"\n    ]\n}",
+                        "title": "A Certain Scientific Accelerator",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-certain-scientific-accelerator.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-certain-scientific-railgun\",\n    \"titles\": [\n        \"A Certain Scientific Railgun\",\n        \"a certain scientific railgun\"\n    ]\n}",
+                        "title": "A Certain Scientific Railgun",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-certain-scientific-railgun.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-condition-called-love\",\n    \"titles\": [\n        \"A Condition Called Love\",\n        \"a condition called love\"\n    ]\n}",
+                        "title": "A Condition Called Love",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-condition-called-love.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-couple-of-cuckoos\",\n    \"titles\": [\n        \"A Couple of Cuckoos\",\n        \"a couple of cuckoos\"\n    ]\n}",
+                        "title": "A Couple of Cuckoos",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-couple-of-cuckoos.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-destructive-god-sits-next-to-me\",\n    \"titles\": [\n        \"A Destructive God Sits Next to Me\",\n        \"a destructive god sits next to me\"\n    ]\n}",
+                        "title": "A Destructive God Sits Next to Me",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-destructive-god-sits-next-to-me.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-galaxy-next-door\",\n    \"titles\": [\n        \"A Galaxy Next Door\",\n        \"a galaxy next door\"\n    ]\n}",
+                        "title": "A Galaxy Next Door",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-galaxy-next-door.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-girl-and-her-guard-dog\",\n    \"titles\": [\n        \"A Girl & Her Guard Dog\",\n        \"a girl and her guard dog\"\n    ]\n}",
+                        "title": "A Girl & Her Guard Dog",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-girl-and-her-guard-dog.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-place-further-than-the-universe\",\n    \"titles\": [\n        \"A Place Further Than The Universe\",\n        \"a place further than the universe\"\n    ]\n}",
+                        "title": "A Place Further Than The Universe",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-place-further-than-the-universe.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-rank-party-wo-ridatsu-shita-ore-wa-moto-oshiego-tachi-to-meikyuu-shinbu-wo-mezasu\",\n    \"titles\": [\n        \"A Rank Party wo Ridatsu Shita Ore wa, Moto Oshiego Tachi to Meikyuu Shinbu wo Mezasu\",\n        \"a rank party wo ridatsu shita ore wa moto oshiego tachi to meikyuu shinbu wo mezasu\"\n    ]\n}",
+                        "title": "A Rank Party wo Ridatsu Shita Ore wa, Moto Oshiego Tachi to Meikyuu Shinbu wo Mezasu",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-rank-party-wo-ridatsu-shita-ore-wa-moto-oshiego-tachi-to-meikyuu-shinbu-wo-mezasu.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-returners-magic-should-be-special\",\n    \"titles\": [\n        \"A Returner's Magic Should be Special\",\n        \"a returners magic should be special\"\n    ]\n}",
+                        "title": "A Returner's Magic Should be Special",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-returners-magic-should-be-special.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-sign-of-affection\",\n    \"titles\": [\n        \"A Sign of Affection\",\n        \"a sign of affection\"\n    ]\n}",
+                        "title": "A Sign of Affection",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-sign-of-affection.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-silent-voice\",\n    \"titles\": [\n        \"A Silent Voice\",\n        \"a silent voice\"\n    ]\n}",
+                        "title": "A Silent Voice",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-silent-voice.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/a-star-brighter-than-the-sun\",\n    \"titles\": [\n        \"A Star Brighter Than the Sun\",\n        \"a star brighter than the sun\"\n    ]\n}",
+                        "title": "A Star Brighter Than the Sun",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/a-star-brighter-than-the-sun.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    }
+                ],
+                "hasNextPage": true
+            }
+        },
+        {
+            "name": "Search Query 'Naruto' Check",
+            "target": "GET_SEARCH",
+            "input": {
+                "query": "Naruto"
+            },
+            "contract": {
+                "minCount": 1,
+                "containsTitles": [
+                    "Naruto"
+                ]
+            },
+            "expected": {
+                "animes": [
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/boruto\",\n    \"titles\": [\n        \"Boruto\",\n        \"boruto\"\n    ]\n}",
+                        "title": "Boruto",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/boruto.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/naruto\",\n    \"titles\": [\n        \"Naruto\",\n        \"naruto\"\n    ]\n}",
+                        "title": "Naruto",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/naruto.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/naruto-sd-rock-lee\",\n    \"titles\": [\n        \"Naruto SD Rock Lee\",\n        \"naruto sd rock lee\"\n    ]\n}",
+                        "title": "Naruto SD Rock Lee",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/naruto-sd-rock-lee.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/naruto-shippuden\",\n    \"titles\": [\n        \"Naruto Shippuden\",\n        \"naruto shippuden\"\n    ]\n}",
+                        "title": "Naruto Shippuden",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/naruto-shippuden.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    },
+                    {
+                        "url": "{\n    \"url\": \"/catalogue/sasuke-retsuden\",\n    \"titles\": [\n        \"Sasuke Retsuden\",\n        \"sasuke retsuden\"\n    ]\n}",
+                        "title": "Sasuke Retsuden",
+                        "thumbnailUrl": "https://cdn.jsdelivr.net/gh/Anime-Sama/IMG@img/contenu/sasuke-retsuden.jpg",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": false
+                    }
+                ],
+                "hasNextPage": false
+            }
+        },
+        {
+            "name": "Anime Details & Metadata Check",
+            "target": "GET_DETAILS",
+            "input": {
+                "anime": {
+                    "url": "/catalogue/naruto/",
+                    "title": "Naruto"
+                }
+            },
+            "contract": {
+                "requireNonBlankFields": [
+                    "description",
+                    "thumbnail_url"
+                ]
+            },
+            "expected": {
+                "anime": {
+                    "url": "/catalogue/naruto/",
+                    "title": "Naruto",
+                    "author": "",
+                    "description": "animé ajouté avant la migration, certaine functionnalité peuvent ne pas functionner correctement, veuiller re ajouter cette animé dans votre librairie pour faire la migration\n\n\nDans le village de Konoha vit Naruto, un jeune garçon détesté et craint des villageois du fait qu'il détienne en lui Kyuubi (démon renard à neuf queues) d'une incroyable force, qui a tué un grand nombre de personnes. Le ninja le plus puissant de Konoha à l'époque, le quatrième Hokage, Minato Namikaze, réussit à sceller ce démon dans le corps de Naruto. Malheureusement il y laissa la vie. C'est ainsi que douze ans plus tard, Naruto rêve de devenir le plus grand Hokage de Konoha afin que tous le reconnaissent à sa juste valeur. Mais la route pour devenir Hokage est très longue et Naruto sera confronté à un bon nombre d'épreuves et devra affronter de nombreux ennemis pour atteindre son but !",
+                    "genre": "",
+                    "fetchType": "Episodes",
+                    "seasonNumber": -1.0,
+                    "initialized": false
+                }
+            }
+        },
+        {
+            "name": "Season List Extraction Check",
+            "target": "GET_SEASON_LIST",
+            "input": {
+                "anime": {
+                    "url": "/catalogue/naruto/",
+                    "title": "Naruto"
+                }
+            },
+            "contract": {
+                "minCount": 1
+            },
+            "expected": {
+                "animes": [
+                    {
+                        "url": "/catalogue/naruto/saison1#s-2.0|Avec Fillers",
+                        "title": "Avec Fillers",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": true
+                    },
+                    {
+                        "url": "/catalogue/naruto/saison1hs#s-2.0|Sans Fillers",
+                        "title": "Sans Fillers",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": true
+                    },
+                    {
+                        "url": "/catalogue/naruto/film#s-2.0|Film",
+                        "title": "Film",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": true
+                    },
+                    {
+                        "url": "/catalogue/naruto/kai#s-2.0|Kai",
+                        "title": "Kai",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": true
+                    },
+                    {
+                        "url": "/catalogue/naruto/\\/catalogue\\/naruto\\#s-2.0|OE_BASE",
+                        "title": "OE_BASE",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": true
+                    },
+                    {
+                        "url": "/catalogue/naruto/https:\\/\\/cdn.jsdelivr.net\\/gh\\/Anime-Sama\\/IMG@img\\/contenu\\/thumb\\/naruto.webp#s-2.0|OE_IMG",
+                        "title": "OE_IMG",
+                        "fetchType": "Episodes",
+                        "seasonNumber": -1.0,
+                        "initialized": true
+                    }
+                ]
+            }
+        }
+    ]
+}
