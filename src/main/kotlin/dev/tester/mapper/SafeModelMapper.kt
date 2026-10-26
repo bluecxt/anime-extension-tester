@@ -95,6 +95,7 @@ object SafeModelMapper {
     fun toDto(hoster: Hoster): HosterSnapshotDto = HosterSnapshotDto(
         hosterName = hoster.hosterName,
         internalData = safeGet { hoster.internalData },
+        hosterUrl = safeGet { hoster.hosterUrl },
     )
 
     fun toDto(video: Video): VideoSnapshotDto = VideoSnapshotDto(

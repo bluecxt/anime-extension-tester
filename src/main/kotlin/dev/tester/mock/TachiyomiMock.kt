@@ -25,6 +25,11 @@ object TachiyomiMock {
         every { mockApplication.getSharedPreferences(any<String>(), any<Int>()) } answers {
             currentPreferences()
         }
+        val tempDir = java.nio.file.Files.createTempDirectory("tachiyomi-mock").toFile().apply { deleteOnExit() }
+        val cacheDir = java.io.File(tempDir, "cache").apply { mkdirs() }
+        val filesDir = java.io.File(tempDir, "files").apply { mkdirs() }
+        every { mockApplication.cacheDir } returns cacheDir
+        every { mockApplication.filesDir } returns filesDir
         every { mockApplication.applicationContext } returns mockApplication
 
         Injekt.addSingleton<Application>(mockApplication)

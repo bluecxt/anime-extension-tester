@@ -238,7 +238,11 @@ class TestRunner(
 
             TargetMethod.GET_VIDEO_LIST -> {
                 val videos = if (input.hoster != null) {
-                    val domainHoster = Hoster(input.hoster.hosterName, input.hoster.internalData.orEmpty())
+                    val domainHoster = Hoster(
+                        hosterUrl = input.hoster.hosterUrl.orEmpty(),
+                        hosterName = input.hoster.hosterName,
+                        internalData = input.hoster.internalData.orEmpty(),
+                    )
                     source.getVideoList(domainHoster)
                 } else {
                     val domainEpisode = SafeModelMapper.toDomain(input.episode ?: error("Target ${testCase.target} requires input.episode or input.hoster"))

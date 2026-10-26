@@ -37,6 +37,7 @@ data class EpisodeSnapshotDto(
 data class HosterSnapshotDto(
     val hosterName: String,
     val internalData: String? = null,
+    val hosterUrl: String? = null,
     val videoList: List<VideoSnapshotDto>? = null,
 )
 
