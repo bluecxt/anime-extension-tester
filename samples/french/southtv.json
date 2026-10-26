@@ -11,6 +11,7 @@
       },
       "contract": {
         "minCount": 1,
+        "allThumbnailsNonNull": true,
         "requireNonBlankFields": [
           "title",
           "url"
@@ -25,7 +26,94 @@
         "query": "South"
       },
       "contract": {
-        "minCount": 1
+        "minCount": 1,
+        "allThumbnailsNonNull": true,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "SouthTV Details Check",
+      "target": "GET_DETAILS",
+      "input": {
+        "anime": {
+          "title": "South Park",
+          "url": "southpark"
+        }
+      },
+      "contract": {
+        "requireNonBlankFields": [
+          "description",
+          "thumbnail_url"
+        ]
+      }
+    },
+    {
+      "name": "SouthTV Season List Check",
+      "target": "GET_SEASON_LIST",
+      "input": {
+        "anime": {
+          "title": "South Park",
+          "url": "southpark"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "SouthTV Episode List Check",
+      "target": "GET_EPISODE_LIST",
+      "input": {
+        "anime": {
+          "title": "South Park",
+          "url": "southpark#s=1"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "name",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "SouthTV Hoster List Check",
+      "target": "GET_HOSTER_LIST",
+      "input": {
+        "episode": {
+          "name": "Episode 1 - Cartman a une sonde anale",
+          "url": "southpark/s1e1.mp4"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "SouthTV Video List Check",
+      "target": "GET_VIDEO_LIST",
+      "input": {
+        "hoster": {
+          "hosterName": "SouthTV",
+          "internalData": "southpark/s1e1.mp4"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "url"
+        ]
       }
     }
   ]

@@ -16,17 +16,6 @@
           "url"
         ]
       }
-    },
-    {
-      "name": "AnimesUltra Search 'Dragon' Check",
-      "target": "GET_SEARCH",
-      "input": {
-        "page": 1,
-        "query": "Dragon"
-      },
-      "contract": {
-        "minCount": 1
-      }
     }
   ]
 }

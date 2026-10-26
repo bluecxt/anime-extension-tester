@@ -71,51 +71,56 @@ class TestRunner(
             return@withContext SuiteResult(0, 0, 0, 0, 0L)
         }
 
-        val semaphore = Semaphore(concurrency)
-        var passedCount = 0
-        var failedCount = 0
-        var updatedCount = 0
+        TachiyomiMock.setSuiteContext(suite.headers, suite.cookies)
+        try {
+            val semaphore = Semaphore(concurrency)
+            var passedCount = 0
+            var failedCount = 0
+            var updatedCount = 0
 
-        val updatedTests = mutableListOf<TestCaseSpec>()
+            val updatedTests = mutableListOf<TestCaseSpec>()
 
-        coroutineScope {
-            val deferreds = filteredTests.map { testCase ->
-                async {
-                    semaphore.withPermit {
-                        runSingleTest(suite, testCase, file.parentFile)
+            coroutineScope {
+                val deferreds = filteredTests.map { testCase ->
+                    async {
+                        semaphore.withPermit {
+                            runSingleTest(suite, testCase, file.parentFile)
+                        }
                     }
                 }
-            }
 
-            val results = deferreds.awaitAll()
-            for ((index, result) in results.withIndex()) {
-                val originalTest = filteredTests[index]
-                if (result.isSuccess) {
-                    if (result.wasUpdated) {
-                        updatedCount++
-                        updatedTests.add(originalTest.copy(expected = result.actualSnapshot))
+                val results = deferreds.awaitAll()
+                for ((index, result) in results.withIndex()) {
+                    val originalTest = filteredTests[index]
+                    if (result.isSuccess) {
+                        if (result.wasUpdated) {
+                            updatedCount++
+                            updatedTests.add(originalTest.copy(expected = result.actualSnapshot))
+                        } else {
+                            passedCount++
+                            updatedTests.add(originalTest)
+                        }
                     } else {
-                        passedCount++
+                        failedCount++
                         updatedTests.add(originalTest)
                     }
-                } else {
-                    failedCount++
-                    updatedTests.add(originalTest)
                 }
             }
-        }
 
-        // If updateSnapshots is enabled and changes occurred, write back atomically
-        if (updateSnapshots && updatedCount > 0) {
-            val updatedSuite = suite.copy(tests = updatedTests)
-            val updatedJson = json.encodeToString(updatedSuite)
-            val tempFile = File.createTempFile("snapshot_", ".json", file.parentFile)
-            tempFile.writeText(updatedJson)
-            Files.move(tempFile.toPath(), file.toPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
-        }
+            // If updateSnapshots is enabled and changes occurred, write back atomically
+            if (updateSnapshots && updatedCount > 0) {
+                val updatedSuite = suite.copy(tests = updatedTests)
+                val updatedJson = json.encodeToString(updatedSuite)
+                val tempFile = File.createTempFile("snapshot_", ".json", file.parentFile)
+                tempFile.writeText(updatedJson)
+                Files.move(tempFile.toPath(), file.toPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
+            }
 
-        val duration = System.currentTimeMillis() - suiteStartTime
-        SuiteResult(filteredTests.size, passedCount, failedCount, updatedCount, duration)
+            val duration = System.currentTimeMillis() - suiteStartTime
+            SuiteResult(filteredTests.size, passedCount, failedCount, updatedCount, duration)
+        } finally {
+            TachiyomiMock.clearSuiteContext()
+        }
     }
 
     private suspend fun runSingleTest(
@@ -178,9 +183,10 @@ class TestRunner(
         testCase: TestCaseSpec,
         suiteDir: File,
     ): ExpectedSnapshot = withContext(Dispatchers.IO) {
-        val input = testCase.input
+        TachiyomiMock.withTestContext(testCase.headers, testCase.cookies) {
+            val input = testCase.input
 
-        when (testCase.target) {
+            when (testCase.target) {
             TargetMethod.GET_POPULAR -> {
                 val page = source.getPopularAnime(input.page)
                 ExpectedSnapshot(
@@ -342,6 +348,7 @@ class TestRunner(
             }
         }
     }
+    }
 
     @Suppress("UNCHECKED_CAST")
     private fun invokeProtected(target: Any, name: String, vararg args: Any?): Any? {
@@ -370,7 +377,12 @@ class TestRunner(
     }
 
     private fun validateContract(contract: ContractAssertion, snapshot: ExpectedSnapshot) {
-        val itemsList: List<Any> = snapshot.animes ?: snapshot.episodes ?: snapshot.hosters ?: snapshot.videos ?: emptyList()
+        val itemsList: List<Any> = snapshot.anime?.let { listOf(it) }
+            ?: snapshot.animes
+            ?: snapshot.episodes
+            ?: snapshot.hosters
+            ?: snapshot.videos
+            ?: emptyList()
 
         contract.minCount?.let { min ->
             if (itemsList.size < min) {
@@ -385,7 +397,7 @@ class TestRunner(
         }
 
         if (contract.allThumbnailsNonNull == true) {
-            val nullThumbnails = snapshot.animes?.filter { it.thumbnailUrl.isNullOrBlank() }
+            val nullThumbnails = (snapshot.anime?.let { listOf(it) } ?: snapshot.animes)?.filter { it.thumbnailUrl.isNullOrBlank() }
                 ?: snapshot.episodes?.filter { it.thumbnailUrl.isNullOrBlank() }
                 ?: emptyList()
             if (nullThumbnails.isNotEmpty()) {
@@ -395,7 +407,7 @@ class TestRunner(
 
         if (contract.disallowedThumbnails.isNotEmpty()) {
             val disallowedSet = contract.disallowedThumbnails.toSet()
-            val matches = snapshot.animes?.filter { it.thumbnailUrl in disallowedSet }
+            val matches = (snapshot.anime?.let { listOf(it) } ?: snapshot.animes)?.filter { it.thumbnailUrl in disallowedSet }
                 ?: snapshot.episodes?.filter { it.thumbnailUrl in disallowedSet }
                 ?: emptyList()
             if (matches.isNotEmpty()) {
@@ -404,7 +416,9 @@ class TestRunner(
         }
 
         if (contract.containsTitles.isNotEmpty()) {
-            val titles = snapshot.animes?.map { it.title } ?: snapshot.episodes?.map { it.name } ?: emptyList()
+            val titles = (snapshot.anime?.let { listOf(it.title) } ?: snapshot.animes?.map { it.title })
+                ?: snapshot.episodes?.map { it.name }
+                ?: emptyList()
             for (expectedTitle in contract.containsTitles) {
                 if (titles.none { it.contains(expectedTitle, ignoreCase = true) }) {
                     error("Contract violation: expected title '$expectedTitle' not found in $titles")
@@ -414,13 +428,65 @@ class TestRunner(
 
         contract.urlPattern?.let { pattern ->
             val regex = Regex(pattern)
-            val urls = snapshot.animes?.map { it.url }
+            val urls = (snapshot.anime?.let { listOf(it.url) } ?: snapshot.animes?.map { it.url })
                 ?: snapshot.episodes?.map { it.url }
                 ?: snapshot.videos?.map { it.url }
                 ?: emptyList()
             for (url in urls) {
                 if (!regex.containsMatchIn(url)) {
                     error("Contract violation: url '$url' does not match pattern '$pattern'")
+                }
+            }
+        }
+
+        if (contract.requireNonBlankFields.isNotEmpty()) {
+            for (item in itemsList) {
+                for (field in contract.requireNonBlankFields) {
+                    val value = when (field.lowercase()) {
+                        "title", "name", "hostername", "hoster_name" -> when (item) {
+                            is AnimeSnapshotDto -> item.title
+                            is EpisodeSnapshotDto -> item.name
+                            is HosterSnapshotDto -> item.hosterName
+                            else -> null
+                        }
+                        "internaldata", "internal_data" -> when (item) {
+                            is HosterSnapshotDto -> item.internalData
+                            else -> null
+                        }
+                        "url" -> when (item) {
+                            is AnimeSnapshotDto -> item.url
+                            is EpisodeSnapshotDto -> item.url
+                            is HosterSnapshotDto -> item.hosterUrl
+                            is VideoSnapshotDto -> item.url
+                            else -> null
+                        }
+                        "description" -> when (item) {
+                            is AnimeSnapshotDto -> item.description
+                            is EpisodeSnapshotDto -> item.summary
+                            else -> null
+                        }
+                        "thumbnail_url", "thumbnailurl" -> when (item) {
+                            is AnimeSnapshotDto -> item.thumbnailUrl
+                            is EpisodeSnapshotDto -> item.thumbnailUrl
+                            else -> null
+                        }
+                        "author" -> when (item) {
+                            is AnimeSnapshotDto -> item.author
+                            else -> null
+                        }
+                        "artist" -> when (item) {
+                            is AnimeSnapshotDto -> item.artist
+                            else -> null
+                        }
+                        "genre" -> when (item) {
+                            is AnimeSnapshotDto -> item.genre
+                            else -> null
+                        }
+                        else -> null
+                    }
+                    if (value.isNullOrBlank()) {
+                        error("Contract violation: field '$field' is null or blank on item $item")
+                    }
                 }
             }
         }

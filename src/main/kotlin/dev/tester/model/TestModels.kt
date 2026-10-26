@@ -10,6 +10,8 @@ data class TestSuiteSpec(
     val lang: String? = "fr",
     val sourceId: Long? = null,
     val preferences: Map<String, JsonElement> = emptyMap(),
+    val headers: Map<String, String> = emptyMap(),
+    val cookies: Map<String, String> = emptyMap(),
     val tests: List<TestCaseSpec> = emptyList(),
 )
 
@@ -19,6 +21,8 @@ data class TestCaseSpec(
     val target: TargetMethod,
     val input: TestInput = TestInput(),
     val mockResponse: MockResponseSpec? = null,
+    val headers: Map<String, String> = emptyMap(),
+    val cookies: Map<String, String> = emptyMap(),
     val contract: ContractAssertion? = null,
     val expected: ExpectedSnapshot? = null,
 )

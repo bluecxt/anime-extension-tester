@@ -35,7 +35,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     // HTTP & HTML Parsing
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
+    implementation("com.squareup.okhttp3:okhttp:5.4.0")
     implementation("org.jsoup:jsoup:1.18.3")
 
     // Aniyomi Ecosystem
@@ -44,6 +44,7 @@ dependencies {
     implementation(files("libs/androidx-preference.jar"))
     implementation("io.reactivex:rxjava:1.3.8")
     implementation("com.github.null2264.injekt:injekt-core:4135455a2a")
+    implementation("org.nanohttpd:nanohttpd:2.3.1")
 
     // Android framework classes for pure JVM
     implementation("org.robolectric:android-all:14-robolectric-10818077")
@@ -57,5 +58,9 @@ dependencies {
 
 application {
     mainClass.set("dev.tester.MainKt")
+}
+
+tasks.withType<JavaExec> {
+    jvmArgs("-Dnet.bytebuddy.experimental=true")
 }
 

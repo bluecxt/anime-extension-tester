@@ -25,7 +25,12 @@
         "query": "Naruto"
       },
       "contract": {
-        "minCount": 1
+        "minCount": 1,
+        "allThumbnailsNonNull": true,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
       }
     },
     {
@@ -34,7 +39,7 @@
       "input": {
         "anime": {
           "title": "Naruto",
-          "url": "/catalogue/naruto/"
+          "url": "{\"url\":\"/catalogue/naruto\",\"titles\":[\"Naruto\"]}"
         }
       },
       "contract": {
@@ -50,11 +55,81 @@
       "input": {
         "anime": {
           "title": "Naruto",
-          "url": "/catalogue/naruto/"
+          "url": "{\"url\":\"/catalogue/naruto\",\"titles\":[\"Naruto\"]}"
         }
       },
       "contract": {
-        "minCount": 1
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "AnimeSama Episode List Check",
+      "target": "GET_EPISODE_LIST",
+      "input": {
+        "anime": {
+          "title": "Naruto",
+          "url": "{\"url\":\"/catalogue/naruto/saison1\",\"titles\":[\"Naruto\"],\"season\":\"saison1\"}"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "name",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "AnimeSama Related Anime Check",
+      "target": "FETCH_RELATED",
+      "input": {
+        "anime": {
+          "title": "Naruto",
+          "url": "{\"url\":\"/catalogue/naruto\",\"titles\":[\"Naruto\"]}"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "AnimeSama Hoster List Check",
+      "target": "GET_HOSTER_LIST",
+      "input": {
+        "episode": {
+          "name": "Épisode 1",
+          "url": "[{\"url\":\"https://ansembed.net/embed-1b8gwch0weq4.html\",\"lang\":\"vostfr\"},{\"url\":\"https://uqload.vc/embed-21p39c78a0zf.html\",\"lang\":\"vostfr\"}]"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "AnimeSama Video List Check",
+      "target": "GET_VIDEO_LIST",
+      "input": {
+        "hoster": {
+          "hosterName": "VOSTFR",
+          "internalData": "[{\"url\":\"https://ansembed.net/embed-1b8gwch0weq4.html\",\"lang\":\"vostfr\"}]"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "url"
+        ]
       }
     }
   ]

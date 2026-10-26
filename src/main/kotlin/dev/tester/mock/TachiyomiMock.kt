@@ -41,7 +41,10 @@ object TachiyomiMock {
         every { mockNetwork.client } returns testClient
         every { mockNetwork.cloudflareClient } returns testClient
         every { mockNetwork.clientWithTimeOut(any(), any(), any()) } returns testClient
-        every { mockNetwork.defaultUserAgentProvider() } returns "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        every { mockNetwork.defaultUserAgentProvider() } answers {
+            currentHeaders()["User-Agent"]
+                ?: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:156.0) Gecko/20100101 Firefox/156.0"
+        }
         Injekt.addSingleton<NetworkHelper>(mockNetwork)
 
         // Inject Json
@@ -53,6 +56,51 @@ object TachiyomiMock {
         Injekt.addSingleton<Json>(json)
 
         initialized = true
+    }
+
+    @Volatile
+    private var suiteHeaders: Map<String, String> = emptyMap()
+    @Volatile
+    private var suiteCookies: Map<String, String> = emptyMap()
+
+    @PublishedApi
+    internal val testHeaders = ThreadLocal<Map<String, String>>()
+    @PublishedApi
+    internal val testCookies = ThreadLocal<Map<String, String>>()
+
+    fun setSuiteContext(headers: Map<String, String>, cookies: Map<String, String>) {
+        suiteHeaders = headers
+        suiteCookies = cookies
+    }
+
+    fun clearSuiteContext() {
+        suiteHeaders = emptyMap()
+        suiteCookies = emptyMap()
+    }
+
+    suspend fun <T> withTestContext(headers: Map<String, String>, cookies: Map<String, String>, block: suspend () -> T): T {
+        testHeaders.set(headers)
+        testCookies.set(cookies)
+        return try {
+            block()
+        } finally {
+            testHeaders.remove()
+            testCookies.remove()
+        }
+    }
+
+    fun currentHeaders(): Map<String, String> {
+        val merged = mutableMapOf<String, String>()
+        merged.putAll(suiteHeaders)
+        testHeaders.get()?.let { merged.putAll(it) }
+        return merged
+    }
+
+    fun currentCookies(): Map<String, String> {
+        val merged = mutableMapOf<String, String>()
+        merged.putAll(suiteCookies)
+        testCookies.get()?.let { merged.putAll(it) }
+        return merged
     }
 
     fun <T> withPreferences(prefs: Map<String, JsonElement>, block: () -> T): T {

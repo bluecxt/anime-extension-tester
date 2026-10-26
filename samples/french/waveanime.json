@@ -11,6 +11,7 @@
       },
       "contract": {
         "minCount": 1,
+        "allThumbnailsNonNull": true,
         "requireNonBlankFields": [
           "title",
           "url"
@@ -18,14 +19,88 @@
       }
     },
     {
-      "name": "WaveAnime Search 'Piece' Check",
+      "name": "WaveAnime Search 'Eighty-Six' Check",
       "target": "GET_SEARCH",
       "input": {
         "page": 1,
-        "query": "Piece"
+        "query": "Eighty-Six"
       },
       "contract": {
-        "minCount": 1
+        "minCount": 1,
+        "allThumbnailsNonNull": true,
+        "containsTitles": [
+          "Eighty-Six"
+        ],
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "WaveAnime Details Check",
+      "target": "GET_DETAILS",
+      "input": {
+        "anime": {
+          "title": "86 Eighty-Six",
+          "url": "/series/dP1gcBsKLK8"
+        }
+      },
+      "contract": {
+        "requireNonBlankFields": [
+          "title",
+          "description",
+          "thumbnail_url"
+        ]
+      }
+    },
+    {
+      "name": "WaveAnime Episode List Check",
+      "target": "GET_EPISODE_LIST",
+      "input": {
+        "anime": {
+          "title": "86 Eighty-Six",
+          "url": "/series/dP1gcBsKLK8"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "name",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "WaveAnime Hoster List Check",
+      "target": "GET_HOSTER_LIST",
+      "input": {
+        "episode": {
+          "name": "Épisode 1 - Undertaker",
+          "url": "kHelvCFBtOz"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "WaveAnime Video List Check",
+      "target": "GET_VIDEO_LIST",
+      "input": {
+        "hoster": {
+          "hosterName": "WavePlayer (DASH)",
+          "internalData": "kHelvCFBtOz"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "url"
+        ]
       }
     }
   ]

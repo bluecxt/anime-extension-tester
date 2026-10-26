@@ -14,18 +14,113 @@
         "requireNonBlankFields": [
           "title",
           "url"
+        ],
+        "allThumbnailsNonNull": true
+      }
+    },
+    {
+      "name": "AnimoFlix Search 'Tokyo Revengers' Check",
+      "target": "GET_SEARCH",
+      "input": {
+        "page": 1,
+        "query": "Tokyo Revengers",
+        "filters": {
+          "Langue": "VOSTFR"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ],
+        "allThumbnailsNonNull": true,
+        "containsTitles": [
+          "Tokyo Revengers"
         ]
       }
     },
     {
-      "name": "AnimoFlix Search 'Piece' Check",
-      "target": "GET_SEARCH",
+      "name": "AnimoFlix Details Check",
+      "target": "GET_DETAILS",
       "input": {
-        "page": 1,
-        "query": "Piece"
+        "anime": {
+          "title": "Tokyo Revengers",
+          "url": "/anime/tokyo-revengers/"
+        }
       },
       "contract": {
-        "minCount": 1
+        "requireNonBlankFields": [
+          "description",
+          "thumbnail_url"
+        ]
+      }
+    },
+    {
+      "name": "AnimoFlix Season List Check",
+      "target": "GET_SEASON_LIST",
+      "input": {
+        "anime": {
+          "title": "Tokyo Revengers",
+          "url": "/anime/tokyo-revengers/"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "AnimoFlix Episode List Check",
+      "target": "GET_EPISODE_LIST",
+      "input": {
+        "anime": {
+          "title": "Tokyo Revengers Saison 1",
+          "url": "/anime/tokyo-revengers/saison-1/"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "name",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "AnimoFlix Hoster List Check",
+      "target": "GET_HOSTER_LIST",
+      "input": {
+        "episode": {
+          "name": "Episode 1",
+          "url": "{\"VOSTFR\":\"https://animoflix.to/anime/tokyo-revengers/saison-1/vostfr/episode-1/\"}"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "name",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "AnimoFlix Video List Check",
+      "target": "GET_VIDEO_LIST",
+      "input": {
+        "hoster": {
+          "hosterName": "VOSTFR",
+          "hosterUrl": "https://animoflix.to/anime/tokyo-revengers/saison-1/vostfr/episode-1/"
+        }
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "url"
+        ]
       }
     }
   ]

@@ -24,6 +24,36 @@ object TestNetworkHelper {
             .connectTimeout(timeoutSec, TimeUnit.SECONDS)
             .readTimeout(timeoutSec, TimeUnit.SECONDS)
             .writeTimeout(timeoutSec, TimeUnit.SECONDS)
+            .addInterceptor { chain ->
+                val request = chain.request()
+                val requestBuilder = request.newBuilder()
+                val customHeaders = dev.tester.mock.TachiyomiMock.currentHeaders()
+                for ((name, value) in customHeaders) {
+                    requestBuilder.header(name, value)
+                    if (name.equals("User-Agent", ignoreCase = true) && !value.contains("Chrome")) {
+                        requestBuilder.removeHeader("Sec-CH-UA")
+                        requestBuilder.removeHeader("Sec-CH-UA-Mobile")
+                        requestBuilder.removeHeader("Sec-CH-UA-Platform")
+                    }
+                }
+                val customCookies = dev.tester.mock.TachiyomiMock.currentCookies()
+                if (customCookies.isNotEmpty()) {
+                    val existingCookie = request.header("Cookie")
+                    val cookieMap = mutableMapOf<String, String>()
+                    if (!existingCookie.isNullOrBlank()) {
+                        existingCookie.split(";").forEach { part ->
+                            val kv = part.trim().split("=", limit = 2)
+                            if (kv.size == 2) {
+                                cookieMap[kv[0].trim()] = kv[1].trim()
+                            }
+                        }
+                    }
+                    cookieMap.putAll(customCookies)
+                    val newCookieHeader = cookieMap.entries.joinToString("; ") { "${it.key}=${it.value}" }
+                    requestBuilder.header("Cookie", newCookieHeader)
+                }
+                chain.proceed(requestBuilder.build())
+            }
             .addInterceptor(DomainRateLimitInterceptor(minIntervalMs = rateLimitMs, maxRetries = maxRetries))
 
         if (!proxyUrl.isNullOrBlank()) {
