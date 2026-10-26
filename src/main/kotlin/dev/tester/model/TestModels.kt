@@ -6,7 +6,7 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class TestSuiteSpec(
     val name: String,
-    val extension: String, // FQN of AnimeHttpSource or AnimeSourceFactory
+    val extension: String = "", // FQN of AnimeHttpSource or AnimeSourceFactory, optional if auto-detected from build.gradle
     val lang: String? = "fr",
     val sourceId: Long? = null,
     val preferences: Map<String, JsonElement> = emptyMap(),

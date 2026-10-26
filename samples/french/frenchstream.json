@@ -1,0 +1,32 @@
+{
+  "name": "French Stream Suite",
+  "extension": "eu.kanade.tachiyomi.animeextension.fr.frenchstream.FrenchStream",
+  "lang": "fr",
+  "tests": [
+    {
+      "name": "French Stream Popular Catalog Check",
+      "target": "GET_POPULAR",
+      "input": {
+        "page": 1
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "French Stream Search 'Piece' Check",
+      "target": "GET_SEARCH",
+      "input": {
+        "page": 1,
+        "query": "Piece"
+      },
+      "contract": {
+        "minCount": 1
+      }
+    }
+  ]
+}

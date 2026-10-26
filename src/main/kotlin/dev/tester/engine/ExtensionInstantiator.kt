@@ -10,7 +10,11 @@ object ExtensionInstantiator {
 
     fun instantiate(suite: TestSuiteSpec, customClient: OkHttpClient? = null): AnimeHttpSource {
         return TachiyomiMock.withPreferences(suite.preferences) {
-            val clazz = ExtensionClassLoader.loadClass(suite.extension)
+            val targetFqn = suite.extension.ifBlank {
+                ExtensionClassLoader.detectedExtensionFqn
+                    ?: error("Extension class FQN not specified in test suite nor auto-detected from build.gradle")
+            }
+            val clazz = ExtensionClassLoader.loadClass(targetFqn)
 
             val rawInstance = try {
                 val constructor = clazz.getDeclaredConstructor()

@@ -6,6 +6,8 @@ import java.net.URLClassLoader
 
 object ExtensionClassLoader {
     private var customClassLoader: ClassLoader? = null
+    var detectedExtensionFqn: String? = null
+        private set
 
     fun init(extraPaths: List<String>, extensionDir: String? = null) {
         val urls = mutableListOf<URL>()
@@ -18,7 +20,10 @@ object ExtensionClassLoader {
         }
 
         if (extensionDir != null) {
-            val extDirFile = File(extensionDir).canonicalFile
+            val rawFile = File(extensionDir).canonicalFile
+            val extDirFile = if (rawFile.isFile) rawFile.parentFile else rawFile
+            detectedExtensionFqn = parseExtClassFromGradle(rawFile) ?: parseExtClassFromGradle(extDirFile)
+
             if (extDirFile.exists()) {
                 val extBuild = File(extDirFile, "build")
                 if (extBuild.exists()) {
@@ -58,5 +63,36 @@ object ExtensionClassLoader {
     fun loadClass(fqn: String): Class<*> {
         val loader = customClassLoader ?: Thread.currentThread().contextClassLoader
         return Class.forName(fqn, true, loader)
+    }
+
+    private fun parseExtClassFromGradle(target: File): String? {
+        val gradleFile = if (target.isFile && (target.name == "build.gradle" || target.name == "build.gradle.kts")) {
+            target
+        } else {
+            val f = File(target, "build.gradle")
+            val kts = File(target, "build.gradle.kts")
+            when {
+                f.exists() -> f
+                kts.exists() -> kts
+                else -> null
+            }
+        } ?: return null
+
+        val content = gradleFile.readText()
+        val match = Regex("""extClass\s*=\s*['"]([^'"]+)['"]""").find(content) ?: return null
+        val extClass = match.groupValues[1]
+
+        val moduleDir = gradleFile.parentFile
+        val lang = moduleDir.parentFile?.name ?: "fr"
+        val modName = moduleDir.name
+        val pkg = "eu.kanade.tachiyomi.animeextension.$lang.$modName"
+
+        return if (extClass.startsWith(".")) {
+            "$pkg$extClass"
+        } else if (extClass.contains(".")) {
+            extClass
+        } else {
+            "$pkg.$extClass"
+        }
     }
 }

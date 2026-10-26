@@ -1,0 +1,32 @@
+{
+  "name": "French Anime Suite",
+  "extension": "eu.kanade.tachiyomi.animeextension.fr.frenchanime.FrenchAnime",
+  "lang": "fr",
+  "tests": [
+    {
+      "name": "French Anime Popular Catalog Check",
+      "target": "GET_POPULAR",
+      "input": {
+        "page": 1
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "French Anime Search 'Piece' Check",
+      "target": "GET_SEARCH",
+      "input": {
+        "page": 1,
+        "query": "Piece"
+      },
+      "contract": {
+        "minCount": 1
+      }
+    }
+  ]
+}

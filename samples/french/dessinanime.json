@@ -1,0 +1,32 @@
+{
+  "name": "Dessin Anime Suite",
+  "extension": "eu.kanade.tachiyomi.animeextension.fr.dessinanime.DessinAnime",
+  "lang": "fr",
+  "tests": [
+    {
+      "name": "Dessin Anime Popular Catalog Check",
+      "target": "GET_POPULAR",
+      "input": {
+        "page": 1
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "Dessin Anime Search 'Batman' Check",
+      "target": "GET_SEARCH",
+      "input": {
+        "page": 1,
+        "query": "Batman"
+      },
+      "contract": {
+        "minCount": 1
+      }
+    }
+  ]
+}

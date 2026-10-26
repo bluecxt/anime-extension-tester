@@ -1,0 +1,32 @@
+{
+  "name": "Wiflix Suite",
+  "extension": "eu.kanade.tachiyomi.animeextension.fr.wiflix.Wiflix",
+  "lang": "fr",
+  "tests": [
+    {
+      "name": "Wiflix Popular Catalog Check",
+      "target": "GET_POPULAR",
+      "input": {
+        "page": 1
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "Wiflix Search 'Piece' Check",
+      "target": "GET_SEARCH",
+      "input": {
+        "page": 1,
+        "query": "Piece"
+      },
+      "contract": {
+        "minCount": 1
+      }
+    }
+  ]
+}

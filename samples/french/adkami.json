@@ -1,0 +1,32 @@
+{
+  "name": "ADKami Suite",
+  "extension": "eu.kanade.tachiyomi.animeextension.fr.adkami.ADKami",
+  "lang": "fr",
+  "tests": [
+    {
+      "name": "ADKami Popular Catalog Check",
+      "target": "GET_POPULAR",
+      "input": {
+        "page": 1
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "ADKami Search 'One Piece' Check",
+      "target": "GET_SEARCH",
+      "input": {
+        "page": 1,
+        "query": "One Piece"
+      },
+      "contract": {
+        "minCount": 1
+      }
+    }
+  ]
+}

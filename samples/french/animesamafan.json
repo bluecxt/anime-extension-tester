@@ -1,0 +1,32 @@
+{
+  "name": "AnimeSamaFan Suite",
+  "extension": "eu.kanade.tachiyomi.animeextension.fr.animesamafan.AnimeSamaFan",
+  "lang": "fr",
+  "tests": [
+    {
+      "name": "AnimeSamaFan Popular Catalog Check",
+      "target": "GET_POPULAR",
+      "input": {
+        "page": 1
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "AnimeSamaFan Search 'Piece' Check",
+      "target": "GET_SEARCH",
+      "input": {
+        "page": 1,
+        "query": "Piece"
+      },
+      "contract": {
+        "minCount": 1
+      }
+    }
+  ]
+}

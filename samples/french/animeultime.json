@@ -1,0 +1,32 @@
+{
+  "name": "Anime-Ultime Suite",
+  "extension": "eu.kanade.tachiyomi.animeextension.fr.animeultime.AnimeUltime",
+  "lang": "fr",
+  "tests": [
+    {
+      "name": "Anime-Ultime Popular Catalog Check",
+      "target": "GET_POPULAR",
+      "input": {
+        "page": 1
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "Anime-Ultime Search 'Naruto' Check",
+      "target": "GET_SEARCH",
+      "input": {
+        "page": 1,
+        "query": "Naruto"
+      },
+      "contract": {
+        "minCount": 1
+      }
+    }
+  ]
+}

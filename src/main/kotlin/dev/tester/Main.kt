@@ -56,7 +56,7 @@ class AnimeExtensionTesterCli : CliktCommand(
         .flag(default = false)
 
     override fun run() = runBlocking {
-        println("${ConsoleReporter.BOLD}${ConsoleReporter.CYAN}🚀 Anime Extension Tester v1.0.0${ConsoleReporter.RESET}")
+        println("${ConsoleReporter.BOLD}${ConsoleReporter.CYAN}🚀 Anime Extension Tester v0.0.1${ConsoleReporter.RESET}")
         println("  Concurrency: $concurrency | Rate Limit: ${rateLimitMs}ms | Timeout: ${timeoutSec}s | Update Snapshots: $updateSnapshots")
         if (proxy != null) println("  Proxy: $proxy")
         if (extensionDir != null) println("  Extension Dir: $extensionDir")

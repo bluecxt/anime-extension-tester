@@ -1,0 +1,32 @@
+{
+  "name": "AnimesUltra Suite",
+  "extension": "eu.kanade.tachiyomi.animeextension.fr.animesultra.AnimesUltra",
+  "lang": "fr",
+  "tests": [
+    {
+      "name": "AnimesUltra Popular Catalog Check",
+      "target": "GET_POPULAR",
+      "input": {
+        "page": 1
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "AnimesUltra Search 'Dragon' Check",
+      "target": "GET_SEARCH",
+      "input": {
+        "page": 1,
+        "query": "Dragon"
+      },
+      "contract": {
+        "minCount": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "French-Manga Suite",
+  "extension": "eu.kanade.tachiyomi.animeextension.fr.frenchmanga.FrenchManga",
+  "lang": "fr",
+  "tests": [
+    {
+      "name": "French-Manga Popular Catalog Check",
+      "target": "GET_POPULAR",
+      "input": {
+        "page": 1
+      },
+      "contract": {
+        "minCount": 1,
+        "requireNonBlankFields": [
+          "title",
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "French-Manga Search 'Naruto' Check",
+      "target": "GET_SEARCH",
+      "input": {
+        "page": 1,
+        "query": "Naruto"
+      },
+      "contract": {
+        "minCount": 1
+      }
+    }
+  ]
+}
