@@ -25,31 +25,38 @@ object ExtensionClassLoader {
             detectedExtensionFqn = parseExtClassFromGradle(rawFile) ?: parseExtClassFromGradle(extDirFile)
 
             if (extDirFile.exists()) {
-                val extBuild = File(extDirFile, "build")
-                if (extBuild.exists()) {
-                    extBuild.walkTopDown().forEach { file ->
-                        if (file.isDirectory && file.name == "classes") {
-                            urls.add(file.toURI().toURL())
-                        } else if (file.isFile && file.extension == "jar") {
-                            urls.add(file.toURI().toURL())
-                        }
-                    }
-                }
+                val candidateDirs = mutableListOf(extDirFile)
+                extDirFile.listFiles()?.filter { it.isDirectory }?.let { candidateDirs.addAll(it) }
 
-                // Look for core/build
-                var candidateRepo: File? = extDirFile
-                for (i in 0..4) {
-                    candidateRepo = candidateRepo?.parentFile
-                    val coreBuild = File(candidateRepo, "core/build")
-                    if (coreBuild.exists()) {
-                        coreBuild.walkTopDown().forEach { file ->
-                            if (file.isDirectory && (file.name == "classes" || file.name.contains("bundleLibRuntimeToDir"))) {
+                for (dir in candidateDirs) {
+                    val extBuild = File(dir, "build")
+                    if (extBuild.exists()) {
+                        extBuild.walkTopDown().forEach { file ->
+                            if (file.isDirectory && file.name == "classes") {
                                 urls.add(file.toURI().toURL())
                             } else if (file.isFile && file.extension == "jar") {
                                 urls.add(file.toURI().toURL())
                             }
                         }
+                    }
+                }
+
+                // Locate repository root
+                var repoRoot: File? = extDirFile
+                for (i in 0..4) {
+                    if (repoRoot != null && (File(repoRoot, "settings.gradle.kts").exists() || File(repoRoot, "settings.gradle").exists() || File(repoRoot, ".git").exists())) {
                         break
+                    }
+                    repoRoot = repoRoot?.parentFile
+                }
+
+                if (repoRoot != null) {
+                    scanBuildDir(File(repoRoot, "core/build"), urls)
+                    File(repoRoot, "lib-multisrc").listFiles()?.filter { it.isDirectory }?.forEach { sub ->
+                        scanBuildDir(File(sub, "build"), urls)
+                    }
+                    File(repoRoot, "lib").listFiles()?.filter { it.isDirectory }?.forEach { sub ->
+                        scanBuildDir(File(sub, "build"), urls)
                     }
                 }
             }
@@ -93,6 +100,17 @@ object ExtensionClassLoader {
             extClass
         } else {
             "$pkg.$extClass"
+        }
+    }
+
+    private fun scanBuildDir(buildDir: File, urls: MutableList<URL>) {
+        if (!buildDir.exists()) return
+        buildDir.walkTopDown().forEach { file ->
+            if (file.isDirectory && (file.name == "classes" || file.name.contains("bundleLibRuntimeToDir"))) {
+                urls.add(file.toURI().toURL())
+            } else if (file.isFile && file.extension == "jar") {
+                urls.add(file.toURI().toURL())
+            }
         }
     }
 }
