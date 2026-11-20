@@ -54,6 +54,7 @@ object TestNetworkHelper {
                 }
                 chain.proceed(requestBuilder.build())
             }
+            .addInterceptor(FlareSolverrInterceptor())
             .addInterceptor(DomainRateLimitInterceptor(minIntervalMs = rateLimitMs, maxRetries = maxRetries))
 
         if (!proxyUrl.isNullOrBlank()) {

@@ -189,6 +189,40 @@ Mettre à jour les snapshots avec les résultats actuels :
 
 ---
 
+## Relais Cloudflare (proxyMode)
+
+Certains sites protègent leurs pages par Cloudflare Turnstile : la requête reçoit un `403`
+avec `cf-mitigated: challenge`, et une extension correcte ne peut rien y faire côté HTTP.
+Le tester peut alors déléguer la récupération à un [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr)
+qui résout le défi dans un vrai navigateur, puis rend à l'extension le HTML déjà servi.
+
+Le comportement se règle **par suite**, dans le JSON de l'extension :
+
+```json
+{
+  "name": "Mon Extension Suite",
+  "proxyMode": "half",
+  "flaresolverrUrl": "http://127.0.0.1:8191/v1",
+  "tests": []
+}
+```
+
+`proxyMode` :
+
+| Valeur | Comportement |
+|---|---|
+| `off` (défaut) | trafic direct, aucun relais |
+| `half` | requête directe d'abord ; si Cloudflare répond un défi, la page est re-résolue via FlareSolverr |
+| `full` | toutes les pages passent par FlareSolverr |
+
+`flaresolverrUrl` est optionnel (défaut `http://127.0.0.1:8191/v1`).
+
+Notes :
+- les images, CSS, JS et segments vidéo ne sont jamais relayés (le solveur ne rend que du texte) ;
+- les pages résolues sont mises en cache 2 minutes par URL, sinon un même écran coûte plusieurs secondes à chaque test ;
+- préférer `half` : en `full`, un endpoint JSON légitime (ex. `/api/catalogue`) est chargé comme une
+  navigation de navigateur et revient en HTML au lieu du JSON attendu.
+
 ## Intégration CI (GitHub Actions)
 
 Pour les tests réguliers sur un runner auto-hébergé (recommandé pour éviter les blocages Cloudflare/datacenter des IPs GitHub Actions) :

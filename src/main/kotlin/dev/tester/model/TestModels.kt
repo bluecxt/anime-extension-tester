@@ -12,6 +12,9 @@ data class TestSuiteSpec(
     val preferences: Map<String, JsonElement> = emptyMap(),
     val headers: Map<String, String> = emptyMap(),
     val cookies: Map<String, String> = emptyMap(),
+    // "off" (défaut) | "half" (relais sur défi) | "full" (toutes les pages via FlareSolverr)
+    val proxyMode: String? = null,
+    val flaresolverrUrl: String? = null,
     val tests: List<TestCaseSpec> = emptyList(),
 )
 

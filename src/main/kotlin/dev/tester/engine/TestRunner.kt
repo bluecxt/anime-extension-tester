@@ -2,6 +2,8 @@ package dev.tester.engine
 
 import dev.tester.mapper.SafeModelMapper
 import dev.tester.mock.TachiyomiMock
+import dev.tester.net.ProxyMode
+import dev.tester.net.ProxySettings
 import dev.tester.model.AnimeSnapshotDto
 import dev.tester.model.ContractAssertion
 import dev.tester.model.EpisodeSnapshotDto
@@ -71,6 +73,11 @@ class TestRunner(
             return@withContext SuiteResult(0, 0, 0, 0, 0L)
         }
 
+        ProxySettings.mode = ProxyMode.parse(suite.proxyMode)
+        ProxySettings.endpoint = suite.flaresolverrUrl?.takeIf { it.isNotBlank() } ?: ProxySettings.DEFAULT_ENDPOINT
+        if (ProxySettings.mode != ProxyMode.OFF) {
+            println("  Relay: ${ProxySettings.mode.name.lowercase()} via ${ProxySettings.endpoint}")
+        }
         TachiyomiMock.setSuiteContext(suite.headers, suite.cookies)
         try {
             val semaphore = Semaphore(concurrency)
