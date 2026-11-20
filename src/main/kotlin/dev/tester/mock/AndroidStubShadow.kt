@@ -12,6 +12,17 @@ import java.net.URI
 import java.util.Base64 as JavaBase64
 
 object AndroidStubShadow {
+    /** Réplique la sémantique de `android.util.Base64.encodeToString` en respectant les flags. */
+    private fun encodeBase64(data: ByteArray, flags: Int): String {
+        val urlSafe = flags and 8 != 0       // URL_SAFE
+        val noPadding = flags and 1 != 0     // NO_PADDING
+        val noWrap = flags and 2 != 0        // NO_WRAP
+        var encoder = if (urlSafe) JavaBase64.getUrlEncoder() else JavaBase64.getEncoder()
+        if (noPadding) encoder = encoder.withoutPadding() as JavaBase64.Encoder
+        val encoded = encoder.encodeToString(data)
+        return if (noWrap) encoded else encoded.chunked(76).joinToString("\n") + "\n"
+    }
+
     private var installed = false
     var verbose: Boolean = false
 
@@ -71,7 +82,13 @@ object AndroidStubShadow {
                 }
             }
             every { Base64.encodeToString(any<ByteArray>(), any()) } answers {
-                JavaBase64.getEncoder().encodeToString(firstArg<ByteArray>())
+                encodeBase64(firstArg<ByteArray>(), secondArg<Int>())
+            }
+            every { Base64.encodeToString(any<ByteArray>(), any(), any(), any()) } answers {
+                val data = firstArg<ByteArray>()
+                val offset = secondArg<Int>()
+                val length = thirdArg<Int>()
+                encodeBase64(data.copyOfRange(offset, offset + length), arg<Int>(3))
             }
         }
 

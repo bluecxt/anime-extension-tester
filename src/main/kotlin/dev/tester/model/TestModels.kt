@@ -53,6 +53,10 @@ data class ContractAssertion(
     val disallowedThumbnails: List<String> = emptyList(),
     val requireNonBlankFields: List<String> = emptyList(),
     val containsTitles: List<String> = emptyList(),
+    // Au moins un item doit avoir le champ donné contenant la sous-chaîne (ex: quality -> Filemoon)
+    val fieldContains: Map<String, List<String>> = emptyMap(),
+    // Aucun item ne doit avoir le champ donné contenant la sous-chaîne (ex: quality -> failed)
+    val fieldNotContains: Map<String, List<String>> = emptyMap(),
     val urlPattern: String? = null,
 )
 

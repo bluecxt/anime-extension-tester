@@ -439,6 +439,42 @@ class TestRunner(
             }
         }
 
+        if (contract.fieldContains.isNotEmpty() || contract.fieldNotContains.isNotEmpty()) {
+            fun valuesOf(field: String): List<String> = itemsList.mapNotNull { item ->
+                when (field.lowercase()) {
+                    "quality" -> (item as? VideoSnapshotDto)?.quality
+                    "title" -> (item as? AnimeSnapshotDto)?.title
+                    "name" -> (item as? EpisodeSnapshotDto)?.name
+                    "hostername", "hoster_name" -> (item as? HosterSnapshotDto)?.hosterName
+                    "url" -> when (item) {
+                        is VideoSnapshotDto -> item.url
+                        is AnimeSnapshotDto -> item.url
+                        is EpisodeSnapshotDto -> item.url
+                        is HosterSnapshotDto -> item.hosterUrl
+                        else -> null
+                    }
+                    else -> null
+                }
+            }
+            for ((field, needles) in contract.fieldContains) {
+                val values = valuesOf(field)
+                for (needle in needles) {
+                    if (values.none { it.contains(needle, ignoreCase = true) }) {
+                        error("Contract violation: no item has '$field' containing '$needle' (found: ${values.take(6)})")
+                    }
+                }
+            }
+            for ((field, needles) in contract.fieldNotContains) {
+                val values = valuesOf(field)
+                for (needle in needles) {
+                    val offending = values.filter { it.contains(needle, ignoreCase = true) }
+                    if (offending.isNotEmpty()) {
+                        error("Contract violation: $field must not contain '$needle' (offending: ${offending.take(3)})")
+                    }
+                }
+            }
+        }
+
         if (contract.requireNonBlankFields.isNotEmpty()) {
             for (item in itemsList) {
                 for (field in contract.requireNonBlankFields) {
@@ -458,6 +494,10 @@ class TestRunner(
                             is EpisodeSnapshotDto -> item.url
                             is HosterSnapshotDto -> item.hosterUrl
                             is VideoSnapshotDto -> item.url
+                            else -> null
+                        }
+                        "quality" -> when (item) {
+                            is VideoSnapshotDto -> item.quality
                             else -> null
                         }
                         "description" -> when (item) {
